@@ -1,0 +1,19 @@
+#Distrib choice
+FROM alpine:3.14
+
+#actually specified in the dockerfile or command line. is there more for doc
+EXPOSE 80
+
+#update packages manager and add nginx
+RUN  apk update | apk add nginx
+
+#copy the nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
+
+#launch nginx : (on debian with "-g deamon off" maybe I need to do the same.. dono)
+CMD ["nginx"]
+
+
+#TODO :
+#	->handle the nginx user
+#	->openssl sertificate is suposed to be here
