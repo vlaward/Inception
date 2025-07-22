@@ -3,4 +3,13 @@ services:
 		image:
 			nginx:mainline
 		ports:
-			80:80
+			443:44
+
+#volumes:
+#	wp_data:
+#		driver: local		
+
+networks:
+	inception_network:
+		driver: bridge
+		name: inception_network
