@@ -1,0 +1,13 @@
+FROM alpine:3.14
+
+
+#changer l'emplacement de wordrpress ? pitetre ? don't know
+#recup le fichier compresser de wordpress, le decompresser et nettoyer le fichier temporaire
+RUN curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-$version.tar.gz"; \
+	tar -xzf wordpress.tar.gz -C /usr/src/; \
+	rm wordpress.tar.gz;
+
+#copie la configuration de wordpress dans le docker en changeant son appartenance pour le donner a www-data
+COPY --chown=www-data:www-data wp-config.php /usr/src/wordpress/
+
+

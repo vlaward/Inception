@@ -3,6 +3,9 @@ FROM alpine:3.14
 
 EXPOSE 3306
 
-RUN  apk update && apk add mariadb
+RUN	apk update && apk add  mariadb mariadb-client mariadb-server-utils &&
+	chown -R mysql:mysql /ver/lib/mysql
+
+RUN rc-service mariadb restart
 
 CMD ["mariadb"]

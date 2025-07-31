@@ -4,10 +4,28 @@ services:
 			nginx:mainline
 		ports:
 			443:44
+		volumes:
+			wp_data
+	mariadb:
+		image:
+			mariadb:mainline
+		volumes:
+			db_data
+	wordpress:
+		image:
+			wordpress:mainline
+		volumes:
+			wp_data
+volumes:
+	wp_data:
+		driver: 		local
+		name	:			wp_data
+		mountpoint:	/var/www/
+	db_data:
+		driver: 		local
+		name	:			wp_data
+		mountpoint:	/var/data
 
-#volumes:
-#	wp_data:
-#		driver: local		
 
 networks:
 	inception_network:
