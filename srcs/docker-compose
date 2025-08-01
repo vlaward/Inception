@@ -11,11 +11,15 @@ services:
 			mariadb:mainline
 		volumes:
 			db_data
+		network:
+			inception_network
 	wordpress:
 		image:
 			wordpress:mainline
 		volumes:
 			wp_data
+		network:
+			inception_network
 volumes:
 	wp_data:
 		driver: 		local
