@@ -5,11 +5,17 @@ FROM alpine:3.14
 #recup le fichier compresser de wordpress, le decompresser et nettoyer le fichier temporaire
 RUN curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-$version.tar.gz"; \
 	tar -xzf wordpress.tar.gz -C /var/www/; \
-	rm wordpress.tar.gz; \
-	chown -R www-data:www-data /var/www/wordpress
+	rm wordpress.tar.gz
 
 
 #copie la configuration de wordpress dans le docker en changeant son appartenance pour le donner a www-data
-COPY  wp-config.php /var/www/wordpress/
+COPY  wp-config.php /var/www/wordpress/ 
+COPY  sp_entry.sh /usr/bin/sp_entry.sh
 
+RUN	chown -R www-data:www-data /var/www/wordpress; \
+	chmod -x /usr/bin/sp_entry; \
+	mkdir -p /usr/logs/php-fpm
+
+
+ENTRYPOINT ["/usr/bin/sp_entry"]
 

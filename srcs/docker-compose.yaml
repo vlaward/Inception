@@ -6,13 +6,17 @@ services:
 			443:44
 		volumes:
 			wp_data
+		env_file:"var.env"
 	mariadb:
+		ports:
+			3306:3306
 		image:
 			mariadb:mainline
 		volumes:
 			db_data
 		network:
 			inception_network
+		env_file:"var.env"
 	wordpress:
 		image:
 			wordpress:mainline
@@ -20,6 +24,8 @@ services:
 			wp_data
 		network:
 			inception_network
+		env_file:"var.env"
+
 volumes:
 	wp_data:
 		driver: 		local

@@ -11,6 +11,7 @@ else
 	echo "/run/mysqld not existing, creating it"
 	mkdir -p /run/mysqld
 fi
+echo "/run/mysqld permissions incoming"
 chown -R mysql:mysql /run/mysqld
 
 #create the directory for the db data for sqld and give the right to the right user
@@ -21,46 +22,30 @@ else
 	echo "/var/lib/mysql not existing, creating it"
 	mkdir -p /var/lib/mysql
 fi
+echo "/var/lib/mysql1 permissions incoming"
 chown -R mysql:mysql /var/lib/mysql
 
 
 ls /var/lib/mysql
 ls /run/mysqld
-# mysql -u root -p
+# mysql -u root -p  <======= ask for root mdp for a litle status info
 
+#installation help for your server
 mariadb-install-db --user=mysql --datadir="/var/lib/mysql" --socket=/run/mysqld/mysqld.sock
 
-# cat << EOF > tmpfile
-# CREATE DATABASE wordpress;
-# GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost' IDENTIFIED BY 'wordpress password';
-# FLUSH PRIVILEGES;
-# EOF
 
-# EXIT
-/usr/bin/mariadbd --user=mysql &
+#create a tmp file to create the data base
+cat << EOF > tmpfile
+CREATE DATABASE wordpress;
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost' IDENTIFIED BY 'wordpress password';
+FLUSH PRIVILEGES;
+EOF
+
+/usr/bin/mariadbd --user=mysql < tmpfile
+rm -rf tmpfile
+
+/usr/bin/mariadbd --user=mysql --socket=/run/mysqld/mysqld.sock &
 PID="$!"
-ls -l /run/mysqld/mysqld.sock
-mariadb setup --socket=/run/mysqld/mysqld.sock
-mysqladmin -u root password 'password' --socket=/run/mysqld/mysqld.sock
-
-# /usr/bin/mariadb < tmpfile
-# rm -f tmpfile
-# perl /usr/mysql-test/mariadb-test-run.db
-
-#self explainatory ain't it
-
-
-
-
-# /usr/bin/mysqld_safe --datadir="/var/lib/mysql" --socket=/run/mysqld/mysqld.sock
-
-
-# ps aux | grep mysqld
-
-
-
-# # #vraiment question de gerer les mdp un jours, azy j'ai le temps en vrais de vrais 
-# echo "mysqladmin INCOMING
-
+#vraiment question de gerer les mdp un jours, azy j'ai le temps en vrais de vrais 
 kill "${PID}"
-# exec /usr/bin/mariadbd --user=mysql 
+exec /usr/bin/mariadbd --user=mysql 
