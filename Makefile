@@ -1,4 +1,11 @@
 all:
+	docker build -t nginx:current srcs/requirements/nginx
+	docker build -t mariadb:current srcs/requirements/mariadb
+	docker build -t wordpress:current srcs/requirements/wordpress
+	docker compose -f srcs/docker-compose.yaml up
+	
+docker_install:
+	sudo apk add docker docker-cli-compose
 
 push:
 	scp -P 2222 -r ../Inception ncrombez@localhost:~/Documents/

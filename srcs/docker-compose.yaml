@@ -1,43 +1,43 @@
 services:
-	nginx:
-		image:
-			nginx:mainline
-		ports:
-			443:44
-		volumes:
-			wp_data
-		env_file:"var.env"
-	mariadb:
-		ports:
-			3306:3306
-		image:
-			mariadb:mainline
-		volumes:
-			db_data
-		network:
-			inception_network
-		env_file:"var.env"
-	wordpress:
-		image:
-			wordpress:mainline
-		volumes:
-			wp_data
-		network:
-			inception_network
-		env_file:"var.env"
+ nginx:
+  image:
+   nginx:current
+  ports:
+   - 443:44
+  volumes:
+   - wp_data:/var/www
+  env_file:
+   - var.env
+ mariadb:
+  ports:
+   - 3306:3306
+  image:
+   mariadb:current
+  volumes:
+   - db_data:/var/lib/
+  networks:
+   - inception_network
+  env_file:
+   - var.env
+ wordpress:
+  image:
+   wordpress:current
+  volumes:
+   - wp_data:/var/www
+  networks:
+   - inception_network
+  env_file:
+   - var.env
 
 volumes:
-	wp_data:
-		driver: 		local
-		name	:			wp_data
-		mountpoint:	/var/www/
-	db_data:
-		driver: 		local
-		name	:			wp_data
-		mountpoint:	/var/data
-
+ wp_data:
+  driver:   local
+  name :   wp_data
+ db_data:
+  driver:   local
+  name :   db_data
 
 networks:
-	inception_network:
-		driver: bridge
-		name: inception_network
+ inception_network:
+  driver: bridge
+  name: inception_network

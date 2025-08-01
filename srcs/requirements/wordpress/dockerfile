@@ -1,21 +1,23 @@
 FROM alpine:3.14
 
 
+
 #changer l'emplacement de wordrpress ? pitetre ? don't know
 #recup le fichier compresser de wordpress, le decompresser et nettoyer le fichier temporaire
-RUN curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-$version.tar.gz"; \
+RUN apk update &&  apk add curl php8 php8-fpm;\
+	curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-latest.tar.gz"; \
 	tar -xzf wordpress.tar.gz -C /var/www/; \
 	rm wordpress.tar.gz
 
 
 #copie la configuration de wordpress dans le docker en changeant son appartenance pour le donner a www-data
 COPY  wp-config.php /var/www/wordpress/ 
-COPY  sp_entry.sh /usr/bin/sp_entry.sh
+COPY wp_entry.sh /scripts/wp_entry
 
-RUN	chown -R www-data:www-data /var/www/wordpress; \
-	chmod -x /usr/bin/sp_entry; \
+RUN chmod -R 755 /scripts;\
+	chown -R www-data:www-data /var/www/wordpress; \
 	mkdir -p /usr/logs/php-fpm
 
 
-ENTRYPOINT ["/usr/bin/sp_entry"]
+ENTRYPOINT ["/scripts/wp_entry"]
 

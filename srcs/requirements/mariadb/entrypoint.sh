@@ -22,7 +22,7 @@ else
 	echo "/var/lib/mysql not existing, creating it"
 	mkdir -p /var/lib/mysql
 fi
-echo "/var/lib/mysql1 permissions incoming"
+echo "/var/lib/mysql permissions incoming"
 chown -R mysql:mysql /var/lib/mysql
 
 
@@ -36,8 +36,8 @@ mariadb-install-db --user=mysql --datadir="/var/lib/mysql" --socket=/run/mysqld/
 
 #create a tmp file to create the data base
 cat << EOF > tmpfile
-CREATE DATABASE wordpress;
-GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost' IDENTIFIED BY 'wordpress password';
+CREATE DATABASE $WP_DB;
+GRANT ALL PRIVILEGES ON wordpress.* TO '$DB_USR'@'wordpress' IDENTIFIED BY '$WP_PSWD';
 FLUSH PRIVILEGES;
 EOF
 
