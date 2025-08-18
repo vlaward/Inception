@@ -1,16 +1,12 @@
 
 FROM alpine:3.14
 
+#suposely only informativ
 EXPOSE 3306
 
 RUN	apk update && apk add  mariadb mariadb-client mariadb-server-utils openrc
-	# chown -R mysql:mysql /ver/lib/mysql
-
 
 COPY entrypoint.sh /scripts/entrypoint
-
 RUN chmod -R 755 /scripts
-
-# RUN rc-service mariadb restart
 
 ENTRYPOINT ["/scripts/entrypoint"]

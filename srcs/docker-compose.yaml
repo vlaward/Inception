@@ -2,8 +2,10 @@ services:
  nginx:
   image:
    nginx:current
+  depends_on:
+   - wordpress
   ports:
-   - 443:44
+   - 443:443
   volumes:
    - wp_data:/var/www
   env_file:
@@ -22,6 +24,9 @@ services:
  wordpress:
   image:
    wordpress:current
+  depends_on:
+   mariadb:
+    - condition
   volumes:
    - wp_data:/var/www
   networks:
