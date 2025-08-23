@@ -6,7 +6,16 @@ EXPOSE 3306
 
 RUN	apk update && apk add  mariadb mariadb-client mariadb-server-utils openrc
 
+#copy all usefull things
 COPY entrypoint.sh /scripts/entrypoint
-RUN chmod -R 755 /scripts
+
+#create all usefull directories
+RUN mkdir -p /var/lib/mysql
+
+#give the rights to the uselfull things
+RUN chown mysql:mysql /var/lib && \ 
+	chmod -R 755 /scripts
+
+
 
 ENTRYPOINT ["/scripts/entrypoint"]
