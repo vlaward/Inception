@@ -1,21 +1,21 @@
+FROM alpine:latest
 
-FROM alpine:3.14
+# Install mariadb and dependencies
+RUN apk add --no-cache mariadb mariadb-client
 
-#suposely only informativ
+# Set up MariaDB data directory
+
+RUN mkdir -p /run/mysqld && chown mysql:mysql /run/mysqld && chmod -R 755 /run/mysqld
+COPY entrypoint.sh scripts/entrypoint.sh
+
+RUN chmod 775 scripts/entrypoint.sh
+
 EXPOSE 3306
 
-RUN	apk update && apk add  mariadb mariadb-client mariadb-server-utils openrc
+# Set root password via env var
+ENV MYSQL_ROOT_PASSWORD=root
 
-#copy all usefull things
-COPY entrypoint.sh /scripts/entrypoint
-
-#create all usefull directories
-RUN mkdir -p /var/lib/mysql
-
-#give the rights to the uselfull things
-RUN chown mysql:mysql /var/lib && \ 
-	chmod -R 755 /scripts
+RUN mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 
 
-
-ENTRYPOINT ["/scripts/entrypoint"]
+ENTRYPOINT ["scripts/entrypoint.sh"]

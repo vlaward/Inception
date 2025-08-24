@@ -1,7 +1,8 @@
 all:
-	docker build -t nginx:current srcs/requirements/nginx
-	docker build -t mariadb:current srcs/requirements/mariadb
-	docker build -t wordpress:current srcs/requirements/wordpress
+# 	docker build -t nginx:current srcs/requirements/nginx
+# 	docker build -t mariadb:current srcs/requirements/mariadb
+# 	docker build -t wordpress:current srcs/requirements/wordpress
+	docker compose -f srcs/docker-compose.yaml build
 	docker compose -f srcs/docker-compose.yaml up
 	
 docker_install:
@@ -24,6 +25,12 @@ wordpress:
 	docker run -it wordpress:current\
 
 clean:
+	docker compose -f srcs/docker-compose.yaml down
 	docker container prune -f
-	docker image prune -f
+	docker image prune -fa
 
+fclean : clean
+	docker compose -f srcs/docker-compose.yaml down -v
+	rm -rf /home/ncrombez/data/db/* /home/ncrombez/data/wordpress/*
+
+re : clean all

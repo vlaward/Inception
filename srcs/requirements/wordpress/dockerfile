@@ -1,20 +1,22 @@
 FROM alpine:3.14
 
 
+RUN	mkdir -p /var/www/wordpress
 
 #changer l'emplacement de wordrpress ? pitetre ? don't know
 #recup le fichier compresser de wordpress, le decompresser et nettoyer le fichier temporaire
-RUN apk update &&  apk add curl php8 php8-fpm; \
+RUN apk update &&  apk add mariadb-client php8-mysqli 	curl php8 php8-fpm; \
 	curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-latest.tar.gz"; \
-	tar -xzf wordpress.tar.gz -C /var/www/; \
-	rm wordpress.tar.gz
+	tar -xzf wordpress.tar.gz -C /var/www
+	# rm wordpress.tar.gz
 
 
 #copie la configuration de wordpress dans le docker en changeant son appartenance pour le donner a www-data
 COPY  wp-config.php /var/www/wordpress/ 
-# COPY wp_entry.sh /scripts/wp_entry
+COPY  www.conf /etc/php8/php-fpm.d/www.conf
+COPY wp_entry.sh /scripts/wp_entry
 
-# RUN chmod -R 755 /scripts && \
+RUN chmod -R 755 /scripts
 # 	chown -R www-data:www-data /var/www/wordpress && \
 # 	mkdir -p /usr/logs/php-fpm && \
 # 	mkdir -p /var/www/wordpress && \
@@ -22,14 +24,15 @@ COPY  wp-config.php /var/www/wordpress/
 # 	chown -R nginx:www-data /var/www/wordpress
 
 
-# RUN chmod -R 755 /scripts
-RUN adduser -D www-data -G www-data;
-RUN	mkdir -p /usr/logs/php-fpm
-RUN	mkdir -p /var/www/wordpress
-RUN	chown -R www-data:www-data /var/www/wordpress
+RUN adduser -D www-data -G www-data && \
+	adduser -D nginx -G www-data && \
+	mkdir -p /usr/logs/php-fpm && \
+	chown -R www-data:www-data /var/www/wordpress && \
+	chmod -R 775 /var/www/wordpress
+
 
 EXPOSE 9000
 
-# ENTRYPOINT ["/scripts/wp_entry"]
-CMD ["php-fpm8", "-F"]
+ENTRYPOINT ["/scripts/wp_entry"]
+# CMD ["php-fpm8", "-F"]
 
