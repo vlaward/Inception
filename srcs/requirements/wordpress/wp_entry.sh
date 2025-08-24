@@ -2,7 +2,7 @@
 
 
 echo "Waiting for database..."
-sleep 6;
+sleep 10;
 
 # until mysqladmin ping -h "mariadb:3306" --silent; do
 #   echo "Waiting for database..."

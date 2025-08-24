@@ -1,12 +1,14 @@
 FROM alpine:latest
 
 # Install mariadb and dependencies
-RUN apk add --no-cache mariadb mariadb-client
+RUN apk add --no-cache mariadb mariadb-client openrc
 
 # Set up MariaDB data directory
 
-RUN mkdir -p /run/mysqld && chown mysql:mysql /run/mysqld && chmod -R 755 /run/mysqld
+RUN mkdir -p /var/mysqld && chown mysql:mysql /var/mysqld && chmod -R 755 /var/mysqld
+RUN mkdir -p /etc/mysql && chown mysql:mysql /etc/mysql && chmod -R 777 /etc/mysql
 COPY entrypoint.sh scripts/entrypoint.sh
+COPY my.cnf /etc/mysql/my.cnf
 
 RUN chmod 775 scripts/entrypoint.sh
 

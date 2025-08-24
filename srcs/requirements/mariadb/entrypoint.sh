@@ -1,9 +1,8 @@
 #!/bin/sh
 
-rc-service mariadb start;
+mysqld_safe &
 
-sleep 2;
-
+sleep 5;
 
 mysql -u root << EOF
 CREATE DATABASE IF NOT EXISTS \`${WP_DB}\`;
@@ -12,6 +11,7 @@ GRANT ALL PRIVILEGES ON \`${WP_DB}\`.* TO '${DB_USR}'@'%';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '${DB_PSWD}' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 EOF
+
 mysqladmin -u root -p"${DB_PSWD}" shutdown;
 
 

@@ -31,6 +31,5 @@ clean:
 
 fclean : clean
 	docker compose -f srcs/docker-compose.yaml down -v
-	rm -rf /home/ncrombez/data/db/* /home/ncrombez/data/wordpress/*
 
 re : clean all
