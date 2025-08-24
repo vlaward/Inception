@@ -5,14 +5,42 @@ RUN	mkdir -p /var/www/wordpress
 
 #changer l'emplacement de wordrpress ? pitetre ? don't know
 #recup le fichier compresser de wordpress, le decompresser et nettoyer le fichier temporaire
-RUN apk update &&  apk add mariadb-client php8-mysqli 	curl php8 php8-fpm; \
-	curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-latest.tar.gz"; \
-	tar -xzf wordpress.tar.gz -C /var/www
-	# rm wordpress.tar.gz
+RUN apk update &&  apk add mariadb-client \
+	php8-mysqli \
+	php8-fpm \
+	php8-phar \
+	php8 \
+	php8-phar \
+	php8-mbstring \
+	php8-json \
+	php8-curl \
+	php8-mysqli \
+	php8-pdo \
+	php8-pdo_mysql \
+	php8-tokenizer \
+	php8-xml \
+	php8-ctype \
+	php8-iconv \
+	php8-openssl \
+	php8-session \
+	php8-dom \
+	php8-simplexml \
+	php8-fileinfo \
+	php8-gd \
+	php8-xmlreader \
+	php8-xmlwriter \
+	php8-posix \
+	curl \
+	bash && \
+	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x wp-cli.phar && \
+    mv wp-cli.phar /usr/local/bin/wp && \
+	ln -s /usr/bin/php8 /usr/bin/php
+
+# rm wordpress.tar.gz
 
 
 #copie la configuration de wordpress dans le docker en changeant son appartenance pour le donner a www-data
-COPY  wp-config.php /var/www/wordpress/ 
 COPY  www.conf /etc/php8/php-fpm.d/www.conf
 COPY wp_entry.sh /scripts/wp_entry
 
